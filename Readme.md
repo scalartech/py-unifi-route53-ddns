@@ -44,7 +44,7 @@ Use the visual editor to create a policy with the following permissions:
 When asked for the resource, specify the zone ID of the Route53 hosted zone that you're using.
 
 Or use the following policy JSON:
-```
+```json
 {
     "Version": "2012-10-17",
     "Statement": [
