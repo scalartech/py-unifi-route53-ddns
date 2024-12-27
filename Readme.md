@@ -8,7 +8,7 @@ Ubiquiti UniFi gateways such as [Cloud Gateway Max](https://store.ui.com/us/en/c
 It is assumed that you know how to use AWS (including how to create an IAM user and access key, and give your user appropriately scoped permissions to read Route53 hosted zones, read records, and write records - see **IAM permissions** below), and have a hosted zone configured for your domain in Route53.
 
 ### Installation
-*  Enable SSH in unifi console (navigate to Control Plane -> Console -> Advanced -> SSH), then run `ssh ui@192.168.1.1` and:
+*  Enable SSH in the UniFi console (navigate to Control Plane -> Console -> Advanced -> SSH), then run `ssh ui@192.168.1.1` and:
 ```
 apt install python3-distutils
 python3 -m venv /usr/local/share/pyuir53ddns --without-pip
