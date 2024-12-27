@@ -1,7 +1,9 @@
 # `py-unifi-route53-ddns`
-This is a minimalistic utility to run dynamic DNS updates on your Ubiquiti UniFi Gateway consoles using AWS Route53 DNS.
+This is a minimalistic utility to run dynamic DNS updates on Ubiquiti UniFi Gateway consoles using AWS Route53 DNS.
 
-It uses the system Python to install a virtualenv, and installs a systemd timer and service (effectively a cron job) to update the DNS hostname every 5 minutes.
+Ubiquiti UniFi gateways such as [Cloud Gateway Max](https://store.ui.com/us/en/category/cloud-gateways-compact/collections/cloud-gateway-max/products/ucg-max) and [Dream Machine SE](https://store.ui.com/us/en/category/cloud-gateways-large-scale/products/udm-se) provide Internet gateway router functions for home and small business networks. While the UniFi router software has some built-in connectors to third-party dynamic DNS services, it does not integrate with AWS Route53, which is the DNS provider of choice for many people.
+
+`py-unifi-route53-ddns` uses the system Python to install a virtualenv to isolate its dependencies from the rest of the system, and installs a systemd timer and service (effectively a cron job) to update the DNS hostname every 5 minutes.
 
 It is assumed that you know how to use AWS (including how to create an IAM user and access key, and give your user appropriately scoped permissions to read Route53 hosted zones, read records, and write records - see **IAM permissions** below), and have a hosted zone configured for your domain in Route53.
 
