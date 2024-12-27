@@ -60,7 +60,7 @@ systemd_service = """[Unit]
 Description="py-unifi-route53-ddns"
 
 [Service]
-ExecStart=/usr/local/share/pyuir53ddns/bin/py-unifi-route53-ddns run
+ExecStart={entrypoint} run
 """
 
 systemd_timer="""[Unit]
@@ -84,10 +84,12 @@ Environment="ROUTE53_TTL=300"
 
 def install():
     if not shutil.which("systemctl"):
-        raise Exception("systemctl does not appear to be active")
+        parser.exit("systemctl does not appear to be active")
+    if not shutil.which("py-unifi-route53-ddns"):
+        parser.exit("unable to resolve location of py-unifi-route53-ddns")
     logger.info("Installing /etc/systemd/system/py-unifi-route53-ddns.service...")
     with open("/etc/systemd/system/py-unifi-route53-ddns.service", "w") as service_fh:
-        service_fh.write(systemd_service)
+        service_fh.write(systemd_service.format(entrypoint=shutil.which("py-unifi-route53-ddns")))
     logger.info("Installing /etc/systemd/system/py-unifi-route53-ddns.timer...")
     with open("/etc/systemd/system/py-unifi-route53-ddns.timer", "w") as timer_fh:
         timer_fh.write(systemd_timer)
