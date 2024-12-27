@@ -27,3 +27,6 @@ py-unifi-route53-ddns = "py_unifi_route53_ddns:main"
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
+
+[tool.ruff]
+line-length = 120
