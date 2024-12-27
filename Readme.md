@@ -19,7 +19,7 @@ source /usr/local/share/pyuir53ddns/bin/activate
 wget https://bootstrap.pypa.io/get-pip.py
 python get-pip.py
 pip install https://github.com/cloud-utils/py-unifi-route53-ddns/archive/refs/heads/main.zip
-/usr/local/share/pyuir53ddns/bin/py-unifi-route53-ddns install
+py-unifi-route53-ddns install
 ```
 The install script will prompt you for your access key ID, access key, hosted zone domain name, and dynamic hostname to update. These variables will be saved to the systemd service override file in `/etc/systemd/system/py-unifi-route53-ddns.service.d/env.conf`. Other files created by the service are:
 
