@@ -5,9 +5,11 @@ Ubiquiti UniFi gateways such as [Cloud Gateway Max](https://store.ui.com/us/en/c
 
 `py-unifi-route53-ddns` uses the system Python to install a virtualenv to isolate its dependencies from the rest of the system, and installs a systemd timer and service (effectively a cron job) to update the DNS hostname every 5 minutes.
 
-It is assumed that you know how to use AWS (including how to create an IAM user and access key, and give your user appropriately scoped permissions to read Route53 hosted zones, read records, and write records - see **IAM permissions** below), and have a hosted zone configured for your domain in Route53.
-
 ### Installation
+* Decide which domain name you will use to host your dynamic name, and configure a Route53 hosted zone for it if you
+  haven't already.
+* Create an AWS IAM user with the IAM permissions listed in the **IAM permissions** section below.
+* Create an access key credential for the AWS IAM user and have it handy to copy into the terminal.
 * Enable SSH in the UniFi console (navigate to Control Plane -> Console -> Advanced -> SSH) and set the password.
 * Connect to the console via `ssh ui@192.168.1.1` and run the following commands:
 ```
