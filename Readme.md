@@ -1,7 +1,7 @@
 # `py-unifi-route53-ddns`
 This is a minimalistic utility to run dynamic DNS updates on Ubiquiti UniFi Gateway consoles using AWS Route53 DNS.
 
-Ubiquiti UniFi gateways such as [Cloud Gateway Max](https://store.ui.com/us/en/category/cloud-gateways-compact/collections/cloud-gateway-max/products/ucg-max) and [Dream Machine SE](https://store.ui.com/us/en/category/cloud-gateways-large-scale/products/udm-se) provide Internet gateway router functions for home and small business networks. While the UniFi router software has some built-in connectors to third-party dynamic DNS services, it does not integrate with AWS Route53, which is the DNS provider of choice for many people.
+Ubiquiti UniFi gateways such as [Cloud Gateway Max](https://store.ui.com/us/en/category/cloud-gateways-compact/collections/cloud-gateway-max/products/ucg-max) and [Dream Machine SE](https://store.ui.com/us/en/category/cloud-gateways-large-scale/products/udm-se) provide Internet gateway router functions for home and small business networks. When running the network on an ISP connection without a reserved static IP, you can use dynamic DNS updating to bind the dynamically assigned IP address to a DNS name (such as home.example.net). This DNS name can then be used with a WireGuard configuration to VPN to the network, for example. While the UniFi router software has some built-in connectors to third-party dynamic DNS services, it does not integrate with AWS Route53, which is the DNS provider of choice for many people.
 
 `py-unifi-route53-ddns` uses the system Python to install a virtualenv to isolate its dependencies from the rest of the system, and installs a systemd timer and service (effectively a cron job) to update the DNS hostname every 5 minutes.
 
@@ -28,6 +28,9 @@ To remove the service, just delete all of these files.
 
 ### Monitoring
 Use `systemctl status py-unifi-route53-ddns.service` or `journalctl -u py-unifi-route53-ddns.service` to see the status and logs of the service.
+
+### WireGuard VPN configuration
+The UniFi console provides a built-in WireGuard VPN. Navigate to Control Plane -> VPN -> VPN Server -> Create New, configure the server, and check "Use Alternate Address for Clients", then enter the FQDN that you configured as the dynamic hostname above. Any client added after this point (with a QR code or otherwise) will receive this configuration.
 
 ### IAM permissions
 Use the visual editor to create a policy with the following permissions:
