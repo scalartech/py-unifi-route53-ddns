@@ -1,15 +1,44 @@
 import argparse
-import os
+import getpass
 import logging
+import os
+import shutil
+
 import boto3
 import urllib3
-import shutil
-import getpass
+
+systemd_service = """[Unit]
+Description="py-unifi-route53-ddns"
+
+[Service]
+ExecStart={entrypoint} run
+"""
+
+systemd_timer = """[Unit]
+Description="Run py-unifi-route53-ddns.service every 5 minutes"
+
+[Timer]
+OnCalendar=*:5/10
+Unit=py-unifi-route53-ddns.service
+
+[Install]
+WantedBy=multi-user.target
+"""
+
+systemd_override = """[Service]
+Environment="AWS_ACCESS_KEY_ID={akid}"
+Environment="AWS_SECRET_ACCESS_KEY={access_key}"
+Environment="ROUTE53_HOSTED_ZONE_DNS_NAME={zone_name}"
+Environment="ROUTE53_MY_DNS_NAME={host_name}"
+Environment="ROUTE53_TTL=300"
+"""
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 route53 = boto3.client("route53")
 http = urllib3.PoolManager()
+parser = argparse.ArgumentParser(prog=__name__)
+parser.add_argument("action", choices=["install", "run"])
 
 
 def get_my_ip():
@@ -44,10 +73,6 @@ def set_route53_ip(new_ip, my_dns_name, hosted_zone_id, ttl):
     logger.info("Completed update: %s", res)
 
 
-parser = argparse.ArgumentParser(prog=__name__)
-parser.add_argument("action", choices=["install", "run"])
-
-
 def run():
     HOSTED_ZONE_DNS_NAME = os.environ["ROUTE53_HOSTED_ZONE_DNS_NAME"]
     MY_DNS_NAME = os.environ["ROUTE53_MY_DNS_NAME"]
@@ -69,33 +94,6 @@ def run():
             "IP in %s (%s) for %s (%s) matches, nothing to do", HOSTED_ZONE_DNS_NAME, hosted_zone_id, MY_DNS_NAME, my_ip
         )
     route53_ip, _ = get_route53_ip(hosted_zone_dns_name=HOSTED_ZONE_DNS_NAME, my_dns_name=MY_DNS_NAME)
-
-
-systemd_service = """[Unit]
-Description="py-unifi-route53-ddns"
-
-[Service]
-ExecStart={entrypoint} run
-"""
-
-systemd_timer = """[Unit]
-Description="Run py-unifi-route53-ddns.service every 5 minutes"
-
-[Timer]
-OnCalendar=*:5/10
-Unit=py-unifi-route53-ddns.service
-
-[Install]
-WantedBy=multi-user.target
-"""
-
-systemd_override = """[Service]
-Environment="AWS_ACCESS_KEY_ID={akid}"
-Environment="AWS_SECRET_ACCESS_KEY={access_key}"
-Environment="ROUTE53_HOSTED_ZONE_DNS_NAME={zone_name}"
-Environment="ROUTE53_MY_DNS_NAME={host_name}"
-Environment="ROUTE53_TTL=300"
-"""
 
 
 def install():
