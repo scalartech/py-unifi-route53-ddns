@@ -69,6 +69,10 @@ Or use the following policy JSON:
 
 Please report bugs, issues, feature requests, etc. on [GitHub](https://github.com/cloud-utils/py-unifi-route53-ddns/issues).
 
+### Links
+
+* [UniFi Comparison Charts](https://evanmccann.net/blog/ubiquiti/unifi-comparison-charts) with technical information about different UniFi gateways
+
 ### License
 
 Copyright 2024, Andrey Kislyuk and py-unifi-route53-ddns contributors. Licensed under the terms of the
