@@ -42,11 +42,17 @@ parser.add_argument("action", choices=["install", "run"])
 
 
 def get_my_ip():
-    res = http.request("GET", "https://cloudflare.com/cdn-cgi/trace")
-    for line in res.data.decode().splitlines():
-        data = line.split("=")
-        if data[0] == "ip":
-            return data[1]
+    import subprocess
+    try:
+        output = subprocess.check_output(['ip', 'addr', 'show', 'eth8']).decode()
+        for line in output.splitlines():
+            if 'inet ' in line:
+                # Extract IP address using string splitting
+                ip = line.strip().split()[1].split('/')[0]
+                return ip
+    except (subprocess.CalledProcessError, IndexError) as e:
+        logger.error("Failed to get IP address from eth8: %s", e)
+        return None
 
 
 def get_route53_ip(hosted_zone_dns_name, my_dns_name):
